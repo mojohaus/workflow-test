@@ -1,6 +1,7 @@
 <project>
-<groupId>localdomain</groupId>
-<artifactId>localhost</artifactId>
-<version>1-SNAPSHOT</version>
-<packaging>pom</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>localdomain</groupId>
+    <artifactId>localhost</artifactId>
+    <version>1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 </project>
