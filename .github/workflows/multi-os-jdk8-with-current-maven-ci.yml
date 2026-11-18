@@ -74,6 +74,6 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 8
-          distribution: temurin
+          distribution: zulu
       - name: 'Build'
         run: mvn -B -V --no-transfer-progress -Prun-its clean verify --fail-at-end
