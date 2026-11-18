@@ -19,7 +19,6 @@ name: JDK 8 on Linux, Windows and macOS
 on:
   push:
     branches:
-      - main
       - '*'
   pull_request:
     branches:
