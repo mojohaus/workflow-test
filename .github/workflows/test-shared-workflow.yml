@@ -1,0 +1,51 @@
+# Sandbox for changes to mojohaus/.github reusable workflows.
+#
+# GitHub does not allow contexts or expressions in jobs.<job_id>.uses, so the
+# proposed workflow cannot be called directly by ref. Dispatch this workflow
+# with the branch or SHA from a .github pull request: it checks out that ref,
+# validates every workflow file there, and builds this repository with the
+# currently merged wrapper as a baseline.
+#
+# For a full end-to-end run on the proposed ref, temporarily change the ref in
+# the `baseline` job below to the PR branch, dispatch, then restore it.
+name: Test shared workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch or SHA in mojohaus/.github to validate'
+        required: true
+        default: master
+
+permissions: {}
+
+jobs:
+  validate:
+    name: Validate workflows at ${{ inputs.ref }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out proposed .github ref
+        uses: actions/checkout@v7
+        with:
+          repository: mojohaus/.github
+          ref: ${{ inputs.ref }}
+          path: shared
+          persist-credentials: false
+
+      - name: Parse all workflow YAML
+        run: |
+          ruby -e "require 'yaml'; Dir.glob('shared/.github/workflows/*.yml').each { |f| YAML.load_file(f); puts \"OK #{f}\" }"
+
+      - name: Lint all workflow YAML
+        run: |
+          bash <(curl -sSfL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash) latest /usr/local/bin
+          actionlint shared/.github/workflows/maven-verify.yml shared/workflow-templates/*.yml
+
+  baseline:
+    name: Baseline build with merged wrapper
+    permissions:
+      contents: read
+    uses: mojohaus/.github/.github/workflows/maven-verify.yml@master
