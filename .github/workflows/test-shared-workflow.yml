@@ -3,8 +3,8 @@
 # GitHub does not allow contexts or expressions in jobs.<job_id>.uses, so the
 # proposed workflow cannot be called directly by ref. Dispatch this workflow
 # with the branch or SHA from a .github pull request: it checks out that ref,
-# validates every workflow file there, and builds this repository with the
-# currently merged wrapper as a baseline.
+# and validates every workflow file there. A push to the sandbox branch also
+# builds this repository with the currently merged wrapper as a baseline.
 #
 # For a full end-to-end run on the proposed ref, temporarily change the ref in
 # the `baseline` job below to the PR branch, dispatch, then restore it.
